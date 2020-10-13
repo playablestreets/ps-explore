@@ -27,7 +27,7 @@
 	
 getApi(this);
 
-
+let dump = '';
 //data is set from calling getApi() API
 function setKidstruments(data) {
 	let instruments = data;
@@ -36,9 +36,10 @@ function setKidstruments(data) {
 		inst.index = i++;
 	} );
 	
-	console.log(instruments);
+	// console.log(instruments);
 	
 	instruments.forEach(item => addItem(item));
+	console.log(dump);
 }
 
 function addItem(item){
@@ -46,6 +47,7 @@ function addItem(item){
 	const div  = document.createElement('div');
 	div.className = 'item';
 	div.innerHTML = item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode  ;
+	dump = dump.concat(item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode + '\n');
 
 	const link = document.createElement('a');
 	link.appendChild(div);
