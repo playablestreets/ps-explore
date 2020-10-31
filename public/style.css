@@ -151,7 +151,7 @@ body {
 	/* width: 100%; */
 	height: 100%;
 	/* overflow: hidden; */
-	touch-action: none;
+	/* touch-action: none; */
 }
 
 .bg {
@@ -162,7 +162,7 @@ body {
 	height: 100%;
 	background: #8cc9ff;
 	z-index: 0;
-	/* overflow: hidden; */
+	/* overflow: scroll; */
 	background-image: url(assets/WEB_COMPLETE.svg), none;
 	background-repeat: no-repeat;
 	background-position: center;
