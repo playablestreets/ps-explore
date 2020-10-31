@@ -39,24 +39,36 @@ function setKidstruments(data) {
 	// console.log(instruments);
 	
 	instruments.forEach(item => addItem(item));
-	console.log(dump);
+	// console.log(dump);
 }
 
 function addItem(item){
+
+	const colours = ["#3c0db0", "#f66174", "#ff8dc0", "#4db975", "#ffd259", "#ba89e0"	];
+
 	// document.getElementById('info').innerHTML = instruments[currentInstrument].data.title[0].text + '\nby\n' + instruments[currentInstrument].data.name + ' \n(' + instruments[currentInstrument].index + ' of ' + instruments.length + ')';
 	const div  = document.createElement('div');
+	div.style.backgroundImage = 'url(' + item.data.instrumentimage.url + ')';
+	// div.style.backgroundColor = colours[ Math.random() * colours.length];
+	// console.log( colours[ Math.random() * colours.length()] );
+	div.style.backgroundColor = colours[parseInt(Math.random() * colours.length)];
 	div.className = 'item';
-	div.innerHTML = item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode  ;
+	// div.innerHTML = item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode  ;
+	div.innerHTML = (item.data.title[0].text).toUpperCase();
 	dump = dump.concat(item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode + '\n');
-
+	
 	const link = document.createElement('a');
 	link.appendChild(div);
-
+	
 	link.href = 'http://kidstruments.playableweb.com/?' + item.uid;
-
+	
 	// div.appendChild(link);
-
-
-
+	
+	
+	
 	document.getElementById('items').appendChild(link);
+}
+
+function dumpLog(){
+	console.log(dump);
 }
