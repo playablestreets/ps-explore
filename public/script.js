@@ -1,45 +1,46 @@
-//TODO
-//for further UI
-// https://github.com/loneboarder/p5.experience.js
-//https://github.com/bitcraftlab/p5.gui
-//https://github.com/generative-light/p5.scribble.js
-
-//TOUCH GUI
-//https://github.com/L05/p5.touchgui
-// early work but good to look at for touch interactions on mobile
-//it works great actually
-//https://editor.p5js.org/L05/sketches/LWfA8lGwe
-
-// TODO
-// interface to synths
-// hue, alpha, normx, normy, duration
-// interface to synth indexed by hue:
-// alpha, normx, normy, duration;
-// manually start audioContext.  Perhaps use an instructional splash screen...
 
 'use strict';
 
-
-
-
-
 	
-	
-getApi(this);
+// getApi(this);
 
 let dump = '';
 //data is set from calling getApi() API
-function setKidstruments(data) {
-	let instruments = data;
-	let i = 1;
-	instruments.forEach((inst) => {
-		inst.index = i++;
-	} );
+// function setKidstruments(data) {
+// 	let instruments = data;
+// 	let i = 1;
+// 	instruments.forEach((inst) => {
+// 		inst.index = i++;
+// 	} );
 	
-	// console.log(instruments);
+// 	// console.log(instruments);
 	
-	instruments.forEach(item => addItem(item));
-	// console.log(dump);
+// 	instruments.forEach(item => addItem(item));
+// 	// console.log(dump);
+// }
+
+let type = getUrlName();
+
+if(type != 'kidstrument' && type != 'faces_and_places'){
+	type = 'kidstrument';
+}
+console.log('type: ', type);
+//------------------------------------------------------------------
+//GET DYNAMIC DATA
+//------------------------------------------------------------------
+//CALL PRISMIC API
+getFromApi(type, dataCallback); //returns to setKidstruments()
+
+//SET DYNAMIC DATA FROM PRISMIC
+function dataCallback(data) {
+	console.log('received ', data.length, ' results' );
+	// console.log(data);
+	data.forEach((item) => {
+		console.log(item);
+		addItem(item);
+	});
+
+	// setState('ready');
 }
 
 function addItem(item){
@@ -48,7 +49,9 @@ function addItem(item){
 
 	// document.getElementById('info').innerHTML = instruments[currentInstrument].data.title[0].text + '\nby\n' + instruments[currentInstrument].data.name + ' \n(' + instruments[currentInstrument].index + ' of ' + instruments.length + ')';
 	const div  = document.createElement('div');
-	div.style.backgroundImage = 'url(' + item.data.instrumentimage.url + ')';
+
+	if(type === 'kidstrument') div.style.backgroundImage = 'url(' + item.data.instrumentimage.url + ')';
+	else if(type === 'faces_and_places') div.style.backgroundImage = 'url(' + item.data.face_image.url + ')';
 	// div.style.backgroundColor = colours[ Math.random() * colours.length];
 	// console.log( colours[ Math.random() * colours.length()] );
 	div.style.backgroundColor = colours[parseInt(Math.random() * colours.length)];
@@ -60,7 +63,8 @@ function addItem(item){
 	const link = document.createElement('a');
 	link.appendChild(div);
 	
-	link.href = 'http://kidstruments.playableweb.com/?' + item.uid;
+	if(type === 'kidstrument') link.href = 'http://kidstruments.playableweb.com/?' + item.uid;
+	else if(type === 'faces_and_places') link.href = 'http://fp.playableweb.com/?' + item.uid;
 	
 	// div.appendChild(link);
 	

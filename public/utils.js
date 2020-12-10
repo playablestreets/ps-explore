@@ -4,59 +4,92 @@
 
 const apiEndPoint = 'https://playable-web.cdn.prismic.io/api/v2';
 
-
-function getApi(ctx){
+function getFromApi(typeQuery, setDataCallback){
 	
 	let request = new XMLHttpRequest();
-	
 	request.open('GET', apiEndPoint, true);
+	request.send();
 	
 	request.onload = function () {
 		var data = JSON.parse(this.response);
 		data.refs.forEach((ref) => {
 			if(ref.isMasterRef){
-				// console.log(ref.ref);
-				getKidstrumentsFromPrismic(ref.ref, ctx);
+
+				const masterRef = ref.ref;
+				// console.log('Master Reference is ' + masterRef);
+
+				let predicates = '[[at(document.type,"' + typeQuery + '")]]';
+				let queryEndPoint = apiEndPoint + '/documents/search?ref=' + masterRef + '&q=' + predicates + '&pageSize=100'; 
+				
+				//request data for first page
+				requestData(queryEndPoint, setDataCallback);
 			}
 		});
 	}
-
-	// Send request
-	request.send();
 }
 
 let totalSize;
 let results = [];
 
-function getKidstrumentsFromPrismic(masterRef, ctx){
-	let predicates = '[[at(document.type,"kidstrument")]]';
-	let queryEndPoint = apiEndPoint + '/documents/search?ref=' + masterRef + '&q=' + predicates + '&pageSize=100'; 
-	makeRequest(queryEndPoint, ctx);	
-}
-
-function makeRequest(queryEndPoint, ctx){
+function requestData(queryEndPoint, setDataCallback){	
 	let request = new XMLHttpRequest();
-	request.open('GET', queryEndPoint, true);
 	
+	//start request
+	request.open('GET', queryEndPoint, true);
+	request.send();
+
 	request.onload = function(){
 		var data = JSON.parse(this.response);
-		
 		results = results.concat(data.results);
-		// console.log(results);
 
 		if(data.next_page != null){
-			makeRequest(data.next_page, ctx);
+			//recursively call request data for each page
+			requestData(data.next_page, setDataCallback);
 		}else{
-			console.log('received ', results.length, ' results' );
-			ctx.setKidstruments(results);
+			// console.log('received ', results.length, ' results' );
+			setDataCallback(results);
 		}
 	}
 
-	request.send();
 }
 
 
 
+
+
+
+
+
+
+
+
+
+
+function luma(img) {
+	let newImg = img.get();
+
+	for (let y = 0; y < newImg.height; y++) {
+		for (let x = 0; x < newImg.width; x++) {
+			let index = (x + y * newImg.width) * 4;
+			let r = newImg.pixels[index + 0];
+			let g = newImg.pixels[index + 1];
+			let b = newImg.pixels[index + 2];
+			let a = newImg.pixels[index + 3];
+
+			let luma = r * 0.299 + g * 0.587 + b * 0.0114;
+
+			newImg.pixels[index + 0] = luma;
+			newImg.pixels[index + 1] = luma;
+			newImg.pixels[index + 2] = luma;
+		}
+	}
+	newImg.updatePixels();
+
+	return newImg;
+}
+
+
+//relies on P5
 function getNormMouse() {
 	let normMouseX = mouseX / width;
 	let normMouseY = mouseY / height;
@@ -67,20 +100,28 @@ function getNormMouse() {
 	return obj;
 }
 
+
+
+
+//TODO: this needs a (start timer function)
 function getElapsed() {
 	let endTime = new Date();
 	return endTime - startTime; //in ms
 }
 
-// function getParameterByName(name, url) {
-// 	if (!url) url = window.location.href;
-// 	name = name.replace(/[\[\]]/g, '\\$&');
-// 	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-// 			results = regex.exec(url);
-// 	if (!results) return null;
-// 	if (!results[2]) return '';
-// 	return decodeURIComponent(results[2].replace(/\+/g, ' '));
-// }
+
+
+function getParameterByName(name, url) {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, '\\$&');
+	var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+			results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
 
 function getQueryVariable(variable) {
 	var query = window.location.search.substring(1);
@@ -94,23 +135,9 @@ function getQueryVariable(variable) {
 	return false;
 }
 
+
+
 function getUrlName() {
 	var query = window.location.search.substring(1).toLowerCase(); 
 	return query;
 }
-
-/**
- * Shuffles array in place.
- * @param {Array} a items An array containing the items.
- */
-function shuffle(a) {
-	var j, x, i;
-	for (i = a.length - 1; i > 0; i--) {
-			j = Math.floor(Math.random() * (i + 1));
-			x = a[i];
-			a[i] = a[j];
-			a[j] = x;
-	}
-	return a;
-}
-
