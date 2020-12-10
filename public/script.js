@@ -57,7 +57,8 @@ function addItem(item){
 	div.style.backgroundColor = colours[parseInt(Math.random() * colours.length)];
 	div.className = 'item';
 	// div.innerHTML = item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode  ;
-	div.innerHTML = (item.data.title[0].text).toUpperCase();
+	if(type === 'kidstrument') div.innerHTML = (item.data.title[0].text).toUpperCase();
+	else if(type === 'faces_and_places') div.innerHTML = (item.data.name[0].text).toUpperCase();
 	dump = dump.concat(item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode + '\n');
 	
 	const link = document.createElement('a');
