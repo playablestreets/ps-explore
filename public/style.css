@@ -203,6 +203,15 @@ body {
 	font-family: "chinchilla",sans-serif; 
 	word-wrap: break-word;
 	text-shadow: 2px 2px #00000055;
+	transition-duration: 0.2s;
+}
+
+.item:hover{
+	position: absolute;
+	/* height: 17vw; */
+	/* width: 17vw; */
+	transform: rotate(10deg);
+	transition-duration: 0.2s;
 }
 
 @media(max-width: 900px){
