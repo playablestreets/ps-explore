@@ -21,7 +21,7 @@ let dump = '';
 
 let type = getUrlName();
 
-if(type != 'kidstrument' && type != 'faces_and_places' && type != 'skylines_and_storylines' ){
+if(type != 'kidstrument' && type != 'faces_and_places' && type != 'skylines_and_storylines' && type != 'islands'){
 	type = 'kidstrument';
 }
 console.log('type: ', type);
@@ -53,6 +53,8 @@ function addItem(item){
 	if(type === 'kidstrument') div.style.backgroundImage = 'url(' + item.data.instrumentimage.url + ')';
 	else if(type === 'faces_and_places') div.style.backgroundImage = 'url(' + item.data.face_image.url + ')';
 	else if(type === 'skylines_and_storylines') div.style.backgroundImage = 'url(' + item.data.drawing_1.url + ')';
+	else if(type === 'islands') div.style.backgroundImage = 'url(' + item.data.creature_image.url + ')';
+
 	// div.style.backgroundColor = colours[ Math.random() * colours.length];
 	// console.log( colours[ Math.random() * colours.length()] );
 	div.style.backgroundColor = colours[parseInt(Math.random() * colours.length)];
@@ -61,6 +63,8 @@ function addItem(item){
 	if(type === 'kidstrument') div.innerHTML = (item.data.title[0].text).toUpperCase();
 	else if(type === 'faces_and_places') div.innerHTML = (item.data.name[0].text).toUpperCase();
 	else if(type === 'skylines_and_storylines') div.innerHTML = (item.data.name[0].text).toUpperCase();
+	else if(type === 'islands') div.innerHTML = (item.data.title[0].text).toUpperCase();
+
 
 	dump = dump.concat(item.data.title[0].text + ', ' + item.data.name + ', ' + item.data.age + ', ' + item.data.postcode + '\n');
 	
@@ -70,6 +74,7 @@ function addItem(item){
 	if(type === 'kidstrument') link.href = 'http://kidstruments.playableweb.com/?' + item.uid;
 	else if(type === 'faces_and_places') link.href = 'http://fp.playableweb.com/?' + item.uid;
 	else if(type === 'skylines_and_storylines') link.href = 'http://skylines.playableweb.com/?' + item.uid;
+	else if(type === 'islands') link.href = 'http://islands.playableweb.com/?' + item.uid;
 	
 	// div.appendChild(link);
 	
