@@ -71,7 +71,7 @@ function addItem(item){
 	const link = document.createElement('a');
 	link.appendChild(div);
 	
-	if(type === 'kidstrument') link.href = 'http://kidstruments.playableweb.com/?' + item.uid;
+	if(type === 'kidstrument') link.href = 'http://megakidstruments.playableweb.com/?' + item.uid;
 	else if(type === 'faces_and_places') link.href = 'http://fp.playableweb.com/?' + item.uid;
 	else if(type === 'skylines_and_storylines') link.href = 'http://skylines.playableweb.com/?' + item.uid;
 	else if(type === 'islands') link.href = 'http://islands.playableweb.com/?' + item.uid;
